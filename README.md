@@ -2,7 +2,7 @@
 
 > gulp plugin to convert po to angangular-translate format
 > 
-> based on [grunt-po2json-angular-translate](https://github.com/angular-translate/grunt-po2json-angular-translate)
+> based on [grunt-po2json-angular-translate v0.0.3](https://github.com/angular-translate/grunt-po2json-angular-translate)
 
 ## Install
 
