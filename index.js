@@ -15,7 +15,6 @@ var pluginError = require('gulp-util').PluginError;
 var _ = require('lodash');
 var po = require('node-po');
 var path = require('path');
-var fs = require('fs');
 
 var PLUGIN_NAME = 'gulp-po2json-angular-translate';
 
@@ -25,33 +24,35 @@ function po2Json(options) {
     fuzzy: false,
     upperCaseId : false,
     stringify : true,
-    offset : 1,
+    offset : 0,
     enableAltPlaceholders: true,
     placeholderStructure: ['{','}']
   }, options);
   
   
   var replacePlaceholder = function(string, openingMark, closingMark,altEnabled){
-      if (closingMark !== undefined &&
-          altEnabled &&
-          string.indexOf(closingMark !== -1)){
-          if (string.indexOf(openingMark) !== -1){
-              string = string.replace(openingMark,'{{');
-          }
-          if (string.indexOf(closingMark) !== -1){
-              string = string.replace(closingMark,'}}');
-          }
+    if (closingMark !== undefined &&
+      altEnabled &&
+      string.indexOf(closingMark !== -1)){
+      if (string.indexOf(openingMark) !== -1){
+        var regOpening = new RegExp(openingMark,'g');
+        string = string.replace(regOpening,'{{');
       }
+      if (string.indexOf(closingMark) !== -1){
+        var regClosing = new RegExp(closingMark,'g');
+        string = string.replace(regClosing,'}}');
+      }
+    }
 
-        //If there is no closing mark, then we have standard format: %0,
-      if(string.indexOf(closingMark === -1)){
-          var pattern ='\\%([0-9]|[a-z])';
-          var re = new RegExp(pattern,'g');
-          var index = string.indexOf(re);
-          var substr = string.substr(index,index+2);
-          string = string.replace(re, '{{'+substr+'}}');
-      }
-      return string;
+    //If there is no closing mark, then we have standard format: %0,
+    //if(string.indexOf(closingMark === -1)){
+    //    var pattern ='\\%([0-9]|[a-z])';
+    //    var re = new RegExp(pattern,'g');
+    //    var index = string.indexOf(re);
+    //    var substr = string.substr(index,index+2);
+    //    string = string.replace(re, '{{'+substr+'}}');
+    //}
+    return string;
   };
   
 	return through.obj(function(file, enc, cb) {
@@ -107,7 +108,7 @@ function po2Json(options) {
 
                     var strPl = 'PLURALIZE, plural, offset:'+options.offset;
 
-                    pluralizedStr += '{'+ strPl + ' =2{' + p + singular_words[x]+'}' +
+                    pluralizedStr += '{'+ strPl + ' =1{' + p + singular_words[x]+'}' +
                         ' other{' + p + plural_words[x] +'}}';
 
                 }else{
@@ -119,7 +120,7 @@ function po2Json(options) {
                 }
             }
 
-            pluralizedStr = replacePlaceholder(pluralizedStr,options.placeholderStructure[0],options.placeholderStructure[1],options.enableAltPlaceholders);
+            //pluralizedStr = replacePlaceholder(pluralizedStr,options.placeholderStructure[0],options.placeholderStructure[1],options.enableAltPlaceholders);
             strings[item.msgid] = pluralizedStr ;
             if (singleFile){
                 singleFileStrings[item.msgid]=  pluralizedStr;
