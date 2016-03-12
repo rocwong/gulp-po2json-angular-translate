@@ -1,7 +1,7 @@
 {
   "name": "gulp-po2json-angular-translate",
   "description": "gulp plugin to convert po to angangular-translate format",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "https://github.com/rocwong/gulp-po2json-angular-translate",
   "author": {
     "name": "rocwong",

@@ -6,7 +6,7 @@
 
 ## Install
 
-Install with [npm](https://npmjs.org/package/gulp-angular-gettext)
+Install with [npm](https://www.npmjs.com/package/gulp-po2json-angular-translate)
 
 ```sh
 npm install gulp-po2json-angular-translate --save-dev
